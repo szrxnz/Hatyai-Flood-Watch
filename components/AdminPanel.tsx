@@ -12,6 +12,7 @@ const PRESET = { kind: 'rain', level: 'high', title: 'เตือนฝนต�
 export default function AdminPanel({ amphoes }: { amphoes: string[] }) {
   const [state, setState] = useState<'load' | 'out' | 'in' | 'nocfg'>('load')
   const [pw, setPw] = useState('')
+  const [showPw, setShowPw] = useState(false)
   const [list, setList] = useState<Notice[]>([])
   const [f, setF] = useState({ ...PRESET, kind: 'info', level: 'watch', title: '', body: '', hours: 12 })
   const [areas, setAreas] = useState<string[]>([])
@@ -48,7 +49,10 @@ export default function AdminPanel({ amphoes }: { amphoes: string[] }) {
       <div className="loginic"><Ic n="shield" /></div>
       <h2>เข้าสู่ระบบเจ้าหน้าที่</h2>
       <p className="muted">สำหรับประกาศแจ้งเตือนและจัดการจุดพักพิง</p>
-      <input className="loginin" type="password" placeholder="รหัสผ่าน" value={pw} onChange={(e) => setPw(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && login()} autoComplete="current-password" autoFocus />
+      <div className="pwbox">
+        <input className="loginin" type={showPw ? 'text' : 'password'} placeholder="รหัสผ่าน" value={pw} onChange={(e) => setPw(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && login()} autoComplete="current-password" autoFocus />
+        <button type="button" className="pweye" onClick={() => setShowPw(!showPw)} aria-label={showPw ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'} aria-pressed={showPw}><Ic n={showPw ? 'eyeoff' : 'eye'} /></button>
+      </div>
       {msg && <p className="loginerr" role="alert">{msg}</p>}
       <button className="rpgo" onClick={login} disabled={!pw}>เข้าสู่ระบบ</button>
     </div>

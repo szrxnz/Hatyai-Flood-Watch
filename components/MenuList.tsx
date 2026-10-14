@@ -8,6 +8,7 @@ export default function MenuList({ lang, t }: { lang: string; t: T }) {
     { i: 'news', title: t.updates, sub: t.mUpd, href: `/${lang}/updates` },
     { i: 'bell', title: t.alerts, sub: t.mAlerts, href: `/${lang}/alerts` },
     { i: 'camera', title: t.cctv, sub: t.mCctv, href: `/${lang}/cctv` },
+    { i: 'install', title: t.install, sub: t.mInstall, href: `/${lang}/install` },
   ]
   return (
     <>

@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation'
 
 type T = Record<string, string>
 const MAIN = ['', 'map', 'forecast', 'shelters', 'reports']
-const TITLE: Record<string, string> = { area: 'area', updates: 'updates', cctv: 'cctv', alerts: 'alerts', notices: 'notices', privacy: 'legPrivacy', terms: 'legTerms', credits: 'legCredits', admin: 'staffLink' }
+const TITLE: Record<string, string> = { area: 'area', updates: 'updates', cctv: 'cctv', alerts: 'alerts', notices: 'notices', privacy: 'legPrivacy', terms: 'legTerms', credits: 'legCredits', admin: 'staffLink', install: 'install' }
 
 export default function BackBar({ lang, t }: { lang: string; t: T }) {
   const path = usePathname() ?? `/${lang}`

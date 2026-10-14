@@ -47,7 +47,7 @@ export default function Layout({ children, params }: { children: React.ReactNode
           </div>
           <Nav lang={lang} t={t} variant="bottom" />
           <ReportFlood t={t} />
-          <InstallPrompt t={t} />
+          <InstallPrompt t={t} lang={lang} />
         </div>
       </body>
     </html>

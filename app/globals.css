@@ -462,3 +462,23 @@ button.primary:active,.rpgo:active,.chip:active,.ghost:active,.iconbtn:active,.l
 }.__variable_700a60 {--font: '__IBM_Plex_Sans_Thai_700a60', '__IBM_Plex_Sans_Thai_Fallback_700a60'
 }
 
+
+/* legal: no horizontal overflow, long links wrap */
+.legal{box-sizing:border-box;width:100%;min-width:0;overflow-x:hidden;overflow-wrap:anywhere;word-break:break-word}
+.legal li,.legal p,.legal a,.legal h1,.legal h2{overflow-wrap:anywhere;word-break:break-word;min-width:0}
+.legal ul{margin-left:0;padding-left:20px}
+/* admin password eye */
+.pwbox{position:relative}.pwbox .loginin{padding:0 52px}
+.pweye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:40px;height:40px;border:0;border-radius:10px;background:none;color:var(--mut);display:grid;place-items:center;cursor:pointer}
+.pweye:hover,.pweye[aria-pressed=true]{color:var(--acc)}.pweye svg{width:22px;height:22px;margin:0}
+/* install guide */
+.ig{max-width:780px}.ig .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.ig .tabs button{display:flex;align-items:center;gap:6px;padding:9px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--pill);color:inherit;font:inherit;font-weight:600;cursor:pointer}
+.ig .tabs button.on{background:var(--acc);color:#fff;border-color:transparent}.ig .tabs svg{width:18px;height:18px;margin:0}
+.ig ol{list-style:none;margin:0;padding:0;counter-reset:s}
+.ig li.st{counter-increment:s;display:grid;grid-template-columns:34px 1fr;gap:12px;padding:14px;margin:10px 0;border-radius:14px;background:var(--card);border:1px solid var(--bd)}
+.ig li.st::before{content:counter(s);width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--acc),var(--cy));color:#fff;font-weight:700}
+.ig .st b{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.ig .st p{margin:4px 0 0;line-height:1.65;color:var(--mut)}
+.ig .bic{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:9px;background:var(--pill);border:1px solid var(--bd);color:var(--acc);vertical-align:middle}.ig .bic svg{width:20px;height:20px;margin:0}
+.ig .tip{padding:12px 14px;border-radius:12px;background:var(--soft);border-left:4px solid var(--acc);margin:12px 0;line-height:1.65}
+.ig h2{display:flex;align-items:center;gap:8px;font-size:1.15rem;margin:24px 0 6px}

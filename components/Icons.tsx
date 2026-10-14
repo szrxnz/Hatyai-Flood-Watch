@@ -37,6 +37,12 @@ const P: Record<string, string> = {
   share: 'M12 3v12M8 7l4-4 4 4M5 12v8h14v-8',
   undo: 'M9 14L4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3',
   device: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 3v18M12 7.5h0M12 12h0',
+  eyeoff: 'M3 3l18 18M10.6 5.2A9.8 9.8 0 0 1 12 5c6 0 10 7 10 7a17 17 0 0 1-3.2 3.9M6.5 6.6C3.8 8.4 2 12 2 12s4 7 10 7a9.6 9.6 0 0 0 4-.9M9.9 9.9a2.5 2.5 0 0 0 3.5 3.5',
+  plussq: 'M4 4h16v16H4zM12 8v8M8 12h8',
+  dots: 'M12 5.5h0M12 12h0M12 18.5h0',
+  install: 'M12 3v12M7 10l5 5 5-5M5 20h14',
+  lock: 'M6 11h12v9H6zM8.5 11V8a3.5 3.5 0 0 1 7 0v3',
+  desktop: 'M3 5h18v11H3zM8 20h8M12 16v4',
   sliders: 'M4 7h9M17 7h3M4 17h3M11 17h9M15 5v4M9 15v4',
 }
 export const iconSvg = (n: string) =>

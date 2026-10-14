@@ -6,7 +6,7 @@ type BIP = Event & { prompt: () => Promise<void>; userChoice: Promise<{ outcome:
 const KEY = 'pwa-ask', DAY = 86400000
 const DELAY = 4000
 
-export default function InstallPrompt({ t }: { t: Record<string, string> }) {
+export default function InstallPrompt({ t, lang = 'th' }: { t: Record<string, string>; lang?: string }) {
   const evRef = useRef<BIP | null>(null)
   const [show, setShow] = useState<'' | 'native' | 'ios'>('')
   const remember = (days: number) => { try { localStorage.setItem(KEY, String(Date.now() + (days - 7) * DAY)) } catch {} }
@@ -39,7 +39,7 @@ export default function InstallPrompt({ t }: { t: Record<string, string> }) {
   return (
     <div className="pwa" role="dialog" aria-label={t.pwaTitle}>
       <img src="/icon-192.png" alt="" width={44} height={44} />
-      <div><b>{t.pwaTitle}</b><p>{show === 'ios' ? t.pwaIosBody : t.pwaBody}</p></div>
+      <div><b>{t.pwaTitle}</b><p>{show === 'ios' ? t.pwaIosBody : t.pwaBody}</p><a className="link" href={`/${lang}/install`} style={{ fontSize: '.88rem' }}>{t.pwaHow}</a></div>
       <div className="acts">
         {show === 'native' && <button className="rpgo" style={{ width: 'auto', margin: 0, padding: '9px 18px' }} onClick={install}>{t.pwaInstall}</button>}
         <button className="ghost" onClick={later}>{t.pwaLater}</button>
