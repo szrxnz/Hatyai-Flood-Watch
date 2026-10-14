@@ -504,3 +504,5 @@ button.primary:active,.rpgo:active,.chip:active,.ghost:active,.iconbtn:active,.l
 @keyframes isfade{from{opacity:0}}
 @media(min-width:861px){.isb{align-items:center}.iss{border-radius:28px}}
 @media(prefers-reduced-motion:reduce){.iss,.isb{animation:none}}
+/* legal/credits: .link is nowrap globally; let list links wrap */
+.legal .link{white-space:normal;font-size:inherit}
