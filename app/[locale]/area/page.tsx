@@ -3,7 +3,7 @@ import { Ic } from '@/components/Icons'
 import { dict, isLang } from '@/lib/i18n'
 import { getStationViews } from '@/lib/data'
 
-export const revalidate = 600
+export const revalidate = 120
 const RANK: Record<string, number> = { critical: 0, high: 1, watch: 2, normal: 3, nodata: 4 }
 
 export default async function Area({ params }: { params: { locale: string } }) {
@@ -22,6 +22,15 @@ export default async function Area({ params }: { params: { locale: string } }) {
     amphoe, worst: list.reduce((w, x) => (RANK[x.worst] < RANK[w] ? x.worst : w), 'nodata'),
     list: list.sort((a, b) => RANK[a.worst] - RANK[b.worst] || a.name.localeCompare(b.name)),
   })).sort((a, b) => RANK[a.worst] - RANK[b.worst] || a.amphoe.localeCompare(b.amphoe))
+  if (groups.length === 0) {
+    return (
+      <main className="wrap page">
+        <h1><Ic n="pin" />{t.areaTitle}</h1>
+        <p className="muted">{t.empty}</p>
+        <footer>{t.disclaimer}</footer>
+      </main>
+    )
+  }
   return (
     <main className="wrap page">
       <h1><Ic n="pin" />{t.areaTitle}</h1>

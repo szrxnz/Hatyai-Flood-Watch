@@ -4,12 +4,21 @@ import { Trend } from '@/components/Dashboard'
 import { dict, isLang } from '@/lib/i18n'
 import { fmtTime, getStationViews } from '@/lib/data'
 
-export const revalidate = 600
+export const revalidate = 120
 
 export default async function Updates({ params }: { params: { locale: string } }) {
   if (!isLang(params.locale)) notFound()
   const lang = params.locale, t = dict[lang]
   const items = [...(await getStationViews(lang))].sort((a, b) => (b.at ?? '').localeCompare(a.at ?? ''))
+  if (items.length === 0) {
+    return (
+      <main className="wrap page">
+        <h1><Ic n="news" />{t.updatesTitle}</h1>
+        <p className="muted">{t.empty}</p>
+        <footer>{t.disclaimer}</footer>
+      </main>
+    )
+  }
   return (
     <main className="wrap page">
       <h1><Ic n="news" />{t.updatesTitle}</h1>

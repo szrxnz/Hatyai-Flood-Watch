@@ -33,11 +33,16 @@ export async function fetchStations(): Promise<RawStation[]> {
   try {
     const res = await fetch(THAIWATER_URL, {
       headers: { 'User-Agent': 'hatyai-flood-open-source (contact: you@example.com)' },
-      next: { revalidate: 600 },
+      next: { revalidate: 120 }, // สั้นลง เพื่อไม่ให้ผลล้มเหลวค้างในแคชนาน
       signal: AbortSignal.timeout(20000),
     })
-    if (!res.ok) return []
-    const rows: unknown[] = (await res.json())?.waterlevel_data?.data ?? []
+    if (!res.ok) { console.error('[thaiwater] HTTP', res.status); return [] }
+    const wl = (await res.json())?.waterlevel_data
+    if (wl?.result !== 'OK' || !Array.isArray(wl?.data)) {
+      console.error('[thaiwater] upstream error:', wl?.data?.Message ?? wl?.data?.RespMessage ?? wl?.result)
+      return []
+    }
+    const rows: unknown[] = wl.data
     const out: RawStation[] = []
     for (const r of rows) {
       const p = Row.safeParse(r)
@@ -51,5 +56,5 @@ export async function fetchStations(): Promise<RawStation[]> {
       })
     }
     return out
-  } catch { return [] }
+  } catch (e) { console.error('[thaiwater] fetch failed:', e); return [] }
 }
