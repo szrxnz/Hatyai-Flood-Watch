@@ -20,7 +20,7 @@ const schema = z.object({
 
 export async function GET(req: NextRequest) {
   const all = req.nextUrl.searchParams.get('all') === '1' && isAdmin(req)
-  return NextResponse.json(await listNotices(all), { headers: { 'Cache-Control': all ? 'no-store' : 'public, max-age=30' } })
+  return NextResponse.json(await listNotices(all), { headers: { 'Cache-Control': all ? 'no-store' : 'public, max-age=30, s-maxage=60, stale-while-revalidate=120' } })
 }
 
 export async function POST(req: NextRequest) {

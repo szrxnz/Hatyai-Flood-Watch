@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Ic } from '@/components/Icons'
-import { DEFCFG, isIOS, isStandalone, loadCfg, pushSupported, saveCfg, sendTest, subscribe, syncSub, unsubscribe, type Cfg, type Lv } from '@/lib/pushClient'
+import { DEFCFG, isIOS, isStandalone, loadCfg, pushSupported, saveCfg, sendTest, subscribe, lastErr, syncSub, unsubscribe, type Cfg, type Lv } from '@/lib/pushClient'
 import { playSound, SOUNDS, unlockAudio, type Sound } from '@/lib/sound'
 
 type T = Record<string, string>
@@ -59,7 +59,7 @@ export default function AlertSettings({ t, amphoes, lang }: { t: T; amphoes: str
     setBusy(false)
     setPerm(pushSupported() ? Notification.permission : 'unsupported')
     if (r === 'ok') { setCfg(next); saveCfg(next); setMsg(t.alOnMsg) }
-    else setMsg(r === 'off' ? t.alOff : r === 'denied' ? t.alDenied : r === 'unsupported' ? t.alUnsupported : t.alFail)
+    else setMsg(r === 'off' ? t.alOff : r === 'denied' ? t.alDenied : r === 'unsupported' ? t.alUnsupported : (location.search.includes('debug') ? `${t.alFail} [${lastErr}]` : t.alFail))
   }
   const pickArea = (a: string) => apply({ ...cfg, amphoes: cfg.amphoes.includes(a) ? cfg.amphoes.filter((x) => x !== a) : [...cfg.amphoes, a] })
   const pickSound = (s: Sound) => { unlockAudio(); playSound(s, t.alVoiceText, lang); apply({ ...cfg, sound: s }) }

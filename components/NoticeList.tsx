@@ -9,10 +9,31 @@ const RANK: Record<string, number> = { info: 0, watch: 1, high: 2, critical: 3 }
 export function useNotices() {
   const [list, setList] = useState<Notice[] | null>(null)
   useEffect(() => {
-    const go = () => fetch('/api/notices').then((r) => (r.ok ? r.json() : [])).then(setList).catch(() => setList([]))
+    let alive = true
+    const go = (bust?: boolean) =>
+      fetch(bust ? `/api/notices?t=${Date.now()}` : '/api/notices', { cache: 'no-cache' })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => { if (alive && Array.isArray(d)) setList(d) })
+        .catch(() => { if (alive) setList((cur) => cur ?? []) })
     go()
-    const id = setInterval(go, 120000)
-    return () => clearInterval(id)
+    const id = setInterval(() => { if (document.visibilityState === 'visible') go() }, 20000)
+    const onVis = () => { if (document.visibilityState === 'visible') go() }
+    document.addEventListener('visibilitychange', onVis)
+    const onFocus = () => go()
+    window.addEventListener('focus', onFocus)
+    window.addEventListener('online', onFocus)
+    // ได้ push ตอนเปิดหน้าอยู่: ดึงประกาศใหม่ทันที ไม่รอรอบ poll
+    const onMsg = (e: MessageEvent) => { if (e.data?.type === 'alert') go(true) }
+    const sw = typeof navigator !== 'undefined' ? navigator.serviceWorker : undefined
+    sw?.addEventListener('message', onMsg)
+    return () => {
+      sw?.removeEventListener('message', onMsg)
+      alive = false
+      clearInterval(id)
+      document.removeEventListener('visibilitychange', onVis)
+      window.removeEventListener('focus', onFocus)
+      window.removeEventListener('online', onFocus)
+    }
   }, [])
   return list
 }
