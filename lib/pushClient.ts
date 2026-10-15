@@ -84,12 +84,15 @@ export async function unsubscribe() {
   } catch {}
 }
 
+export let testErr = ''
 export async function sendTest(): Promise<boolean> {
+  testErr = ''
   try {
     const reg = await navigator.serviceWorker.ready
     const sub = await reg.pushManager.getSubscription()
-    if (!sub) return false
+    if (!sub) { testErr = 'no local subscription'; return false }
     const r = await fetch('/api/push/test', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ endpoint: sub.endpoint }) })
+    if (!r.ok) { const j = await r.json().catch(() => ({})); testErr = `${r.status} ${j.error || ''} ${j.detail || ''}`.trim() }
     return r.ok
-  } catch { return false }
+  } catch (e: any) { testErr = String(e?.message || e); return false }
 }

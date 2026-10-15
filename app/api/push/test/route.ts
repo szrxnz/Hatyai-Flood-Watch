@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getSub, sendOne, subId } from '@/lib/push'
+import { getSub, sendOne, subId, lastPushErr } from '@/lib/push'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -21,5 +21,5 @@ export async function POST(req: NextRequest) {
   if (!s) return NextResponse.json({ error: 'none' }, { status: 404 })
   const [title, body] = TXT[s.lang as 'th' | 'en' | 'zh']
   const r = await sendOne(s, { title, body, level: 'watch', url: `/${s.lang}/alerts`, tag: 'test', sound: s.sound, test: true })
-  return r === 'ok' ? NextResponse.json({ ok: true }) : NextResponse.json({ error: r }, { status: 502 })
+  return r === 'ok' ? NextResponse.json({ ok: true }) : NextResponse.json({ error: r, detail: lastPushErr }, { status: 502 })
 }

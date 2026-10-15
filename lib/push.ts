@@ -63,6 +63,7 @@ export const pushReady = () => !!(process.env.VAPID_PUBLIC_KEY && process.env.VA
 
 const VIB: Record<string, number[]> = { critical: [400, 150, 400, 150, 400, 150, 800], high: [300, 120, 300, 120, 300], watch: [200, 100, 200], info: [150] }
 
+export let lastPushErr = ''
 export async function sendOne(s: PushSub, p: Payload): Promise<'ok' | 'gone' | 'fail'> {
   if (!init()) return 'fail'
   const urgent = p.level === 'critical' || p.level === 'high'
@@ -75,6 +76,7 @@ export async function sendOne(s: PushSub, p: Payload): Promise<'ok' | 'gone' | '
     })
     return 'ok'
   } catch (e: any) {
+    lastPushErr = `${e?.statusCode ?? ''} ${String(e?.body || e?.message || '').slice(0, 150)}`.trim()
     return e?.statusCode === 404 || e?.statusCode === 410 ? 'gone' : 'fail'
   }
 }

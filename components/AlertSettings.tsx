@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Ic } from '@/components/Icons'
-import { DEFCFG, isIOS, isStandalone, loadCfg, pushSupported, saveCfg, sendTest, subscribe, lastErr, syncSub, unsubscribe, type Cfg, type Lv } from '@/lib/pushClient'
+import { DEFCFG, isIOS, isStandalone, loadCfg, pushSupported, saveCfg, sendTest, testErr, subscribe, lastErr, syncSub, unsubscribe, type Cfg, type Lv } from '@/lib/pushClient'
 import { playSound, SOUNDS, unlockAudio, type Sound } from '@/lib/sound'
 
 type T = Record<string, string>
@@ -66,7 +66,7 @@ export default function AlertSettings({ t, amphoes, lang }: { t: T; amphoes: str
   const test = async () => {
     setMsg(''); setBusy(true)
     const ok = await sendTest()
-    setBusy(false); setMsg(ok ? t.alTestSent : t.alFail)
+    setBusy(false); setMsg(ok ? t.alTestSent : location.search.includes('debug') ? `${t.alFail} [${testErr}]` : t.alFail)
   }
 
   const unsupported = perm === 'unsupported'
