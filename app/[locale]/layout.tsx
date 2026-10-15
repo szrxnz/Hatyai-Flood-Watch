@@ -21,7 +21,7 @@ export function generateMetadata({ params }: { params: { locale: string } }): Me
   return { title: dict[l].title, description: dict[l].sub, manifest: '/manifest.webmanifest', icons: { icon: [{ url: '/icon-192.png', sizes: '192x192', type: 'image/png' }, { url: '/icon-512.png', sizes: '512x512', type: 'image/png' }], apple: '/icon-192.png' } }
 }
 const font = IBM_Plex_Sans_Thai({ subsets: ['thai', 'latin'], weight: ['400', '500', '600', '700'], display: 'swap', variable: '--font' })
-const THEME_JS = "try{var m=localStorage.getItem('themeMode');if(m!=='light'&&m!=='dark')m='auto';var d=m==='dark'||(m==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);var r=document.documentElement;r.dataset.mode=m;r.dataset.theme=d?'dark':'light';document.querySelector('meta[name=theme-color]').setAttribute('content',d?'#06172a':'#ffffff');if(sessionStorage.getItem('splash'))r.dataset.splash='0'}catch(e){document.documentElement.dataset.theme='light'}"
+const THEME_JS = "try{var m=localStorage.getItem('themeMode');if(m!=='dark'&&m!=='auto')m='light';var d=m==='dark'||(m==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);var r=document.documentElement;r.dataset.mode=m;r.dataset.theme=d?'dark':'light';document.querySelector('meta[name=theme-color]').setAttribute('content',d?'#06172a':'#ffffff');if(sessionStorage.getItem('splash'))r.dataset.splash='0'}catch(e){document.documentElement.dataset.theme='light'}"
 
 export default function Layout({ children, params }: { children: React.ReactNode; params: { locale: string } }) {
   if (!isLang(params.locale)) notFound()

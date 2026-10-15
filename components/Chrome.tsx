@@ -24,13 +24,13 @@ export function Nav({ lang, t, variant }: { lang: string; t: T; variant: 'side' 
 
 export function TopTools({ lang, t }: { lang: string; t: T }) {
   const path = usePathname() ?? `/${lang}`
-  const [mode, setMode] = useState<Mode>('auto')
+  const [mode, setMode] = useState<Mode>('light')
   const [lbl, setLbl] = useState('')
   const timer = useRef<ReturnType<typeof setTimeout>>()
   useEffect(() => {
     setMode(readMode())
     const mq = window.matchMedia('(prefers-color-scheme: dark)')
-    const on = () => { if (readMode() === 'auto') applyMode('auto', false) }
+    const on = () => { if (readMode() === 'auto') applyMode('auto', false, true) }
     mq.addEventListener('change', on)
     return () => { mq.removeEventListener('change', on); clearTimeout(timer.current) }
   }, [])
@@ -38,7 +38,7 @@ export function TopTools({ lang, t }: { lang: string; t: T }) {
   const icons: Record<Mode, string> = { auto: 'device', light: 'sun', dark: 'moon' }
   const cycle = () => {
     const n = MODES[(MODES.indexOf(mode) + 1) % MODES.length]
-    setMode(n); applyMode(n)
+    setMode(n); applyMode(n, true, true)
     setLbl(names[n]); clearTimeout(timer.current); timer.current = setTimeout(() => setLbl(''), 1600)
   }
   return (

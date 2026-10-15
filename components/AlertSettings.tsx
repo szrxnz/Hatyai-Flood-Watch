@@ -20,10 +20,11 @@ export function AlertWatcher({ t, lang }: { t: T; lang: string }) {
       setToast({ title: d.title, body: d.body, url: d.url || `/${lang}`, level: d.level || 'watch' })
     }
     navigator.serviceWorker.addEventListener('message', onMsg)
-    window.addEventListener('pointerdown', unlockAudio, { once: true })
+    const ev = ['pointerdown', 'touchend', 'keydown']
+    ev.forEach((n) => window.addEventListener(n, unlockAudio, { passive: true }))
     const c = loadCfg()
     if (c.on && c.consent && pushSupported() && Notification.permission === 'granted') syncSub(c, lang).catch(() => {})
-    return () => { navigator.serviceWorker.removeEventListener('message', onMsg); window.removeEventListener('pointerdown', unlockAudio) }
+    return () => { navigator.serviceWorker.removeEventListener('message', onMsg); ev.forEach((n) => window.removeEventListener(n, unlockAudio)) }
   }, [lang])
   useEffect(() => { if (!toast) return; const id = setTimeout(() => setToast(null), 20000); return () => clearTimeout(id) }, [toast])
   if (!toast) return null
@@ -64,7 +65,7 @@ export default function AlertSettings({ t, amphoes, lang }: { t: T; amphoes: str
   const pickArea = (a: string) => apply({ ...cfg, amphoes: cfg.amphoes.includes(a) ? cfg.amphoes.filter((x) => x !== a) : [...cfg.amphoes, a] })
   const pickSound = (s: Sound) => { unlockAudio(); playSound(s, t.alVoiceText, lang); apply({ ...cfg, sound: s }) }
   const test = async () => {
-    setMsg(''); setBusy(true)
+    unlockAudio(); setMsg(''); setBusy(true)
     const ok = await sendTest()
     setBusy(false); setMsg(ok ? t.alTestSent : location.search.includes('debug') ? `${t.alFail} [${testErr}]` : t.alFail)
   }

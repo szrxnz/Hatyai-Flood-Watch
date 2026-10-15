@@ -9,6 +9,16 @@ const KINDS: [string, string][] = [['rain', 'ฝนตกหนักต่อ�
 const LEVELS: [string, string][] = [['info', 'ข้อมูล'], ['watch', 'เฝ้าระวัง'], ['high', 'เสี่ยงสูง'], ['critical', 'วิกฤต']]
 const PRESET = { kind: 'rain', level: 'high', title: 'เตือนฝนตกหนักต่อเนื่อง', body: 'คาดว่ามีฝนตกหนักต่อเนื่องในพื้นที่ ขอให้ประชาชนเฝ้าระวังน้ำป่าไหลหลากและน้ำท่วมฉับพลัน เตรียมยกของขึ้นที่สูง และติดตามประกาศอย่างใกล้ชิด', hours: 24 }
 
+type PushRes = { targets: number; ok: number; gone: number; fail: number; errs?: string[] }
+function pushSummary(p: PushRes) {
+  let s = `ส่ง push ถึง ${p.ok}/${p.targets} เครื่อง`
+  if (p.targets === 0) return s + ' (ยังไม่มีผู้สมัครตรงกับพื้นที่ หรือยังไม่มีใครสมัครรับแจ้งเตือน)'
+  if (p.gone) s += ` · หมดอายุ/ถูกลบ ${p.gone} (ระบบลบออกจากฐานข้อมูลแล้ว ต้องสมัครใหม่)`
+  if (p.fail) s += ` · ส่งไม่สำเร็จ ${p.fail}`
+  if (p.errs?.length) s += ` — ${p.errs.join(' | ')}`
+  return s
+}
+
 export default function AdminPanel({ amphoes }: { amphoes: string[] }) {
   const [state, setState] = useState<'load' | 'out' | 'in' | 'nocfg'>('load')
   const [pw, setPw] = useState('')
@@ -37,7 +47,7 @@ export default function AdminPanel({ amphoes }: { amphoes: string[] }) {
   const post = async () => {
     setMsg('')
     const r = await fetch('/api/notices', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...f, areas, push }) })
-    if (r.ok) { const j = await r.json().catch(() => null); setPushInfo(j?.push ? `ส่ง push ถึง ${j.push.ok}/${j.push.targets} เครื่อง` : push ? 'ยังไม่ได้ตั้งค่า VAPID จึงไม่ได้ส่ง push' : ''); setMsg('ประกาศแล้ว'); setF({ ...f, title: '', body: '' }); load() } else setMsg(r.status === 500 ? 'บันทึกไม่ได้ ตรวจการตั้งค่าที่เก็บข้อมูล (README)' : 'ข้อมูลไม่ครบ')
+    if (r.ok) { const j = await r.json().catch(() => null); setPushInfo(j?.push ? pushSummary(j.push) : push ? 'ยังไม่ได้ตั้งค่า VAPID จึงไม่ได้ส่ง push' : ''); setMsg('ประกาศแล้ว'); setF({ ...f, title: '', body: '' }); load() } else setMsg(r.status === 500 ? 'บันทึกไม่ได้ ตรวจการตั้งค่าที่เก็บข้อมูล (README)' : 'ข้อมูลไม่ครบ')
   }
   const del = async (id: string) => { await fetch(`/api/notices?id=${id}`, { method: 'DELETE' }); load() }
   const pick = (a: string) => setAreas(areas.includes(a) ? areas.filter((x) => x !== a) : [...areas, a])
