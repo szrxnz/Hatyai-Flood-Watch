@@ -27,7 +27,7 @@ const L = {
 const lvName = ['', 'watch', 'high', 'critical']
 
 export async function runAlerts() {
-  const now = Date.now()
+  const now = Date.now(), t0 = now
   const views = (await getStationViews('th')).filter((s) => s.status !== 'nodata')
   const prev = await readJson<St | null>('pushstate', 'pushstate.json', null)
   const seeded = prev !== null
@@ -73,7 +73,7 @@ export async function runAlerts() {
     }
   }
   const res = await sendMany(items)
-  return { stations: views.length, events: events.length, rainMm, subs: live.length, purged: purge.length, sent: items.length, ...res, seededNow: !seeded }
+  return { stations: views.length, events: events.length, rainMm, subs: live.length, purged: purge.length, sent: items.length, ...res, seededNow: !seeded, totalMs: Date.now() - t0 }
 }
 
 export async function pushNotice(n: Notice) {

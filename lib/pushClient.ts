@@ -16,9 +16,37 @@ function b64ToU8(b: string) {
   return Uint8Array.from(s, (c) => c.charCodeAt(0))
 }
 
+const sameKey = (sub: PushSubscription, key: Uint8Array) => {
+  const k = sub.options?.applicationServerKey
+  if (!k) return true
+  const a = new Uint8Array(k)
+  return a.length === key.length && a.every((v, i) => v === key[i])
+}
+
+async function serverKey(): Promise<Uint8Array | null> {
+  try {
+    const k = await fetch('/api/push/key', { signal: AbortSignal.timeout(10000) })
+    if (!k.ok) return null
+    const key = b64ToU8(String((await k.json()).key || '').trim().replace(/^[\"']|[\"']$/g, ''))
+    return key.length === 65 ? key : null
+  } catch { return null }
+}
+
+// ถ้า subscription เดิมสร้างด้วยคีย์ VAPID เก่า ให้ลบแล้วสมัครใหม่ด้วยคีย์ปัจจุบัน
+async function healSub(reg: ServiceWorkerRegistration, sub: PushSubscription): Promise<PushSubscription | null> {
+  const key = await serverKey()
+  if (!key || sameKey(sub, key)) return sub
+  const old = sub.endpoint
+  await fetch('/api/push/subscribe', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ endpoint: old }) }).catch(() => {})
+  await sub.unsubscribe().catch(() => {})
+  try { return await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: key as BufferSource }) } catch { return null }
+}
+
 export async function syncSub(c: Cfg, lang: string): Promise<boolean> {
   const reg = await navigator.serviceWorker.ready
-  const sub = await reg.pushManager.getSubscription()
+  let sub = await reg.pushManager.getSubscription()
+  if (!sub) return false
+  sub = await healSub(reg, sub)
   if (!sub) return false
   const r = await fetch('/api/push/subscribe', {
     signal: AbortSignal.timeout(15000),
@@ -54,6 +82,7 @@ export async function subscribe(c: Cfg, lang: string): Promise<SubResult> {
 
     stage = 'push'
     let sub = await tmo(reg.pushManager.getSubscription(), 5000, stage)
+    if (sub && !sameKey(sub, b64ToU8(key))) { await sub.unsubscribe().catch(() => {}); sub = null }
     if (!sub) {
       try {
         sub = await tmo(reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToU8(key) }), 20000, stage)

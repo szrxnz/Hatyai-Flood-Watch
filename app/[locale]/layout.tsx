@@ -8,6 +8,7 @@ import ReportFlood from '@/components/ReportFlood'
 import { AlertWatcher } from '@/components/AlertSettings'
 import InstallPrompt from '@/components/InstallPrompt'
 import Splash from '@/components/Splash'
+import OrientationGuard from '@/components/OrientationGuard'
 import BackBar from '@/components/BackBar'
 import LegalLinks from '@/components/LegalLinks'
 import { Ic } from '@/components/Icons'
@@ -31,6 +32,7 @@ export default function Layout({ children, params }: { children: React.ReactNode
       <head><meta name="theme-color" content="#ffffff" /><script dangerouslySetInnerHTML={{ __html: THEME_JS }} /></head>
       <body>
         <Splash text={t.loading} />
+        <OrientationGuard />
         <AlertWatcher t={t} lang={lang} />
         <div className="shell">
           <aside className="side">

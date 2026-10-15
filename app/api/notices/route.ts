@@ -7,6 +7,7 @@ import { pushReady } from '@/lib/push'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
+export const maxDuration = 60
 
 const schema = z.object({
   kind: z.enum(['rain', 'flood', 'evac', 'info']),

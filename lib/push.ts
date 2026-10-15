@@ -59,42 +59,48 @@ function init() {
   if (!ready) { webpush.setVapidDetails(process.env.VAPID_SUBJECT || 'mailto:admin@example.com', pub, priv); ready = true }
   return true
 }
+export const storeKind = () => (remote ? 'upstash' : 'file')
 export const pushReady = () => !!(process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY)
 
 const VIB: Record<string, number[]> = { critical: [400, 150, 400, 150, 400, 150, 800], high: [300, 120, 300, 120, 300], watch: [200, 100, 200], info: [150] }
 
 export let lastPushErr = ''
 type SendRes = { r: 'ok' | 'gone' | 'fail'; err: string }
-async function sendOneD(s: PushSub, p: Payload): Promise<SendRes> {
+export async function sendOneD(s: PushSub, p: Payload): Promise<SendRes> {
   if (!init()) return { r: 'fail', err: 'VAPID key not set' }
   const urgent = p.level === 'critical' || p.level === 'high'
   try {
     await webpush.sendNotification(s.sub, JSON.stringify({ ...p, vibrate: VIB[p.level] ?? VIB.info, urgent }), {
       TTL: p.test ? 300 : 3 * 3600,
       urgency: urgent ? 'high' : 'normal',
-      topic: p.tag.replace(/[^A-Za-z0-9_-]/g, '').slice(0, 32) || undefined,
-      timeout: 8000,
+      timeout: 4000,
     })
     return { r: 'ok', err: '' }
   } catch (e: any) {
     const err = `${e?.statusCode ?? ''} ${String(e?.body || e?.message || '').slice(0, 150)}`.trim()
     lastPushErr = err
-    return { r: e?.statusCode === 404 || e?.statusCode === 410 ? 'gone' : 'fail', err }
+    const dead = e?.statusCode === 404 || e?.statusCode === 410 || /VapidPkHashMismatch/i.test(String(e?.body || ''))
+    return { r: dead ? 'gone' : 'fail', err }
   }
 }
 export async function sendOne(s: PushSub, p: Payload): Promise<'ok' | 'gone' | 'fail'> { return (await sendOneD(s, p)).r }
 
+const CONCURRENCY = 100
+
+// ส่งพร้อมกันแบบกลุ่มงาน: ตัวไหนเสร็จก่อนก็หยิบงานถัดไปทันที เครื่องที่ตอบช้าไม่ฉุดทั้งชุด
 export async function sendMany(items: { s: PushSub; p: Payload }[]) {
-  let ok = 0, gone = 0, fail = 0
+  let ok = 0, gone = 0, fail = 0, next = 0
   const errs = new Set<string>()
-  for (let i = 0; i < items.length; i += 25) {
-    const res = await Promise.all(items.slice(i, i + 25).map(async ({ s, p }) => {
+  const t0 = Date.now()
+  const worker = async () => {
+    while (next < items.length) {
+      const { s, p } = items[next++]
       const d = await sendOneD(s, p)
       if (d.r === 'gone') await delSub(s.id).catch(() => {})
       if (d.err && errs.size < 3) errs.add(d.err)
-      return d.r
-    }))
-    for (const r of res) r === 'ok' ? ok++ : r === 'gone' ? gone++ : fail++
+      d.r === 'ok' ? ok++ : d.r === 'gone' ? gone++ : fail++
+    }
   }
-  return { ok, gone, fail, errs: [...errs] }
+  await Promise.all(Array.from({ length: Math.min(CONCURRENCY, items.length) }, worker))
+  return { ok, gone, fail, errs: [...errs], ms: Date.now() - t0 }
 }
