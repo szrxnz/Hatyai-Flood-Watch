@@ -59,7 +59,7 @@ export default function AlertSettings({ t, amphoes, lang }: { t: T; amphoes: str
     setBusy(false)
     setPerm(pushSupported() ? Notification.permission : 'unsupported')
     if (r === 'ok') { setCfg(next); saveCfg(next); setMsg(t.alOnMsg) }
-    else setMsg(r === 'off' ? t.alOff : r === 'denied' ? t.alDenied : r === 'unsupported' ? t.alUnsupported : (location.search.includes('debug') ? `${t.alFail} [${lastErr}]` : t.alFail))
+    else setMsg(r === 'off' ? t.alOff : r === 'denied' ? t.alDenied : r === 'unsupported' ? t.alUnsupported : (/push service|AbortError/i.test(lastErr) ? (t as any).alBrave : location.search.includes('debug') ? `${t.alFail} [${lastErr}]` : t.alFail))
   }
   const pickArea = (a: string) => apply({ ...cfg, amphoes: cfg.amphoes.includes(a) ? cfg.amphoes.filter((x) => x !== a) : [...cfg.amphoes, a] })
   const pickSound = (s: Sound) => { unlockAudio(); playSound(s, t.alVoiceText, lang); apply({ ...cfg, sound: s }) }
