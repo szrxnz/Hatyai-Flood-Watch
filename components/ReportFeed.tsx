@@ -1,15 +1,10 @@
 'use client'
-<<<<<<< HEAD
 import { useEffect, useMemo, useState } from 'react'
 import { Ic } from '@/components/Icons'
 import ZoneFilter from '@/components/ZoneFilter'
 import { haversineKm } from '@/lib/geo'
 import { NO_ZONE, useZones, zoneLabel, zoneOf, type ZoneSel } from '@/lib/zones'
 import type { Lang } from '@/lib/types'
-=======
-import { useEffect, useState } from 'react'
-import { Ic } from '@/components/Icons'
->>>>>>> 64a1286b514201750dcba787527d4eb8807aed62
 import type { PublicReport } from '@/lib/reports'
 
 type T = Record<string, string>
@@ -19,23 +14,16 @@ function ago(at: number, t: T) {
   return m < 60 ? `${m} ${t.rfMin}` : `${Math.round(m / 60)} ${t.rfHr}`
 }
 
-<<<<<<< HEAD
 export default function ReportFeed({ t, lang }: { t: T; lang: Lang }) {
-=======
-export default function ReportFeed({ t }: { t: T }) {
->>>>>>> 64a1286b514201750dcba787527d4eb8807aed62
   const [list, setList] = useState<PublicReport[] | null>(null)
   const [flagged, setFlagged] = useState<string[]>([])
   const [cnt, setCnt] = useState<Record<string, number>>({})
   const [done, setDone] = useState<string[]>([])
   const [busy, setBusy] = useState('')
   const [msg, setMsg] = useState<Record<string, string>>({})
-<<<<<<< HEAD
   const zones = useZones()
   const [sel, setSel] = useState<ZoneSel>(NO_ZONE)
   const [me, setMe] = useState<{ lat: number; lng: number } | null>(null)
-=======
->>>>>>> 64a1286b514201750dcba787527d4eb8807aed62
   const say = (id: string, m: string) => setMsg((x) => ({ ...x, [id]: m }))
   useEffect(() => {
     const go = () => fetch('/api/report').then((r) => (r.ok ? r.json() : [])).then(setList).catch(() => setList([]))
@@ -60,7 +48,6 @@ export default function ReportFeed({ t }: { t: T }) {
       setBusy('')
     }, () => { setBusy(''); say(id, t.rpNoLoc) }, { enableHighAccuracy: true, timeout: 15000 })
   }
-<<<<<<< HEAD
   // คำนวณตำบล/อำเภอของแต่ละรายงานจากพิกัดที่ปัก
   const zoneById = useMemo(() => {
     const m = new Map<string, ZoneSel>()
@@ -106,26 +93,5 @@ export default function ReportFeed({ t }: { t: T }) {
             ))}
       </div>
     </>
-=======
-  if (!list) return <div className="card">{t.loading}</div>
-  if (!list.length) return <div className="card"><p className="muted">{t.rfEmpty}</p></div>
-  return (
-    <div className="rfgrid">
-      {list.map((r) => (
-        <article key={r.id} className="card rfc">
-          <img src={`/api/report?id=${r.id}`} alt="" loading="lazy" />
-          <div className="row"><small className="muted"><Ic n="clock" />{ago(r.at, t)}</small>
-            <a className="link" href={`https://www.google.com/maps?q=${r.lat},${r.lng}`} target="_blank" rel="noopener noreferrer"><Ic n="pin" />{t.rfMap}</a></div>
-          {r.note && <p>{r.note}</p>}
-          {(() => { const n = cnt[r.id] ?? r.ok; return <span className={`okb${n >= 3 ? ' strong' : ''}`}><Ic n="check" />{n > 0 ? t.rfOkN.replace('{n}', String(n)) : t.rfOkNone}</span> })()}
-          {msg[r.id] && <small className="muted">{msg[r.id]}</small>}
-          <div className="acts">
-            <button className="ghost" disabled={done.includes(r.id) || busy === r.id} onClick={() => confirmOk(r.id)}><Ic n="check" />{done.includes(r.id) ? t.rfOkDone : t.rfOk}</button>
-            <button className="ghost" disabled={flagged.includes(r.id)} onClick={() => flag(r.id)}><Ic n="alert" />{flagged.includes(r.id) ? t.rfFlagged : t.rfFlag}</button>
-          </div>
-        </article>
-      ))}
-    </div>
->>>>>>> 64a1286b514201750dcba787527d4eb8807aed62
   )
 }
