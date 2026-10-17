@@ -1,0 +1,14 @@
+
+data/notices.json
+.env.local
+data/reports/
+
+data/pushsubs.json
+data/pushstate.json
+data/reports/
+data/shelter-img/
+
+node_modules
+.next
+.env
+.vercel
