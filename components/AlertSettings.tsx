@@ -87,6 +87,10 @@ export default function AlertSettings({ t, amphoes, lang }: { t: T; amphoes: str
         <Ic n="bell" />{busy ? t.rpSending : cfg.on ? t.alDisable : t.alEnable}
       </button>
       {cfg.on && <p className="okb strong" style={{ marginTop: 10 }}><Ic n="check" />{t.alOnState}</p>}
+<<<<<<< HEAD
+=======
+      <p className="warnbox" role="note">{t.alNoGuarantee}</p>
+>>>>>>> 64a1286b514201750dcba787527d4eb8807aed62
 
       <h4>{t.alAreas}</h4>
       <div className="chips">

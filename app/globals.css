@@ -87,7 +87,11 @@ button.ghost svg{width:16px;height:16px}.camicon{display:grid;place-items:center
 .tile::after{content:"";position:absolute;right:0;bottom:0;width:55%;height:100%;background-repeat:no-repeat;background-position:right bottom;background-size:contain;opacity:.9;pointer-events:none}
 .tile.critical::after{background-image:url(/art/critical.jpeg)}.tile.high::after{background-image:url(/art/high.jpeg)}.tile.watch::after{background-image:url(/art/watch.jpeg)}.tile.normal::after{background-image:url(/art/normal.jpeg)}
 .tile>*{position:relative;z-index:1}
+<<<<<<< HEAD
 .hero{background-image:url(/hero.jpeg),linear-gradient(180deg,#1a4f93 0%,#2a7cc0 52%,#0c3157 100%);background-size:cover;background-position:center}
+=======
+.hero{background-image:url(/hero.webp),linear-gradient(180deg,#1a4f93 0%,#2a7cc0 52%,#0c3157 100%);background-size:cover;background-position:center}
+>>>>>>> 64a1286b514201750dcba787527d4eb8807aed62
 
 
 .hero::after{display:none}
@@ -105,7 +109,11 @@ button.ghost svg{width:16px;height:16px}.camicon{display:grid;place-items:center
 .sic{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--cy);z-index:1;display:grid}.sic svg{margin:0;width:20px;height:20px}
 .ex{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:12px;font-size:.88rem;color:var(--mut)}.ex svg{width:16px;height:16px;margin:0 2px 0 0;color:var(--cy)}.ex em{margin:0 8px;font-style:normal;opacity:.5}
 .exb{background:none;border:0;color:var(--fg);cursor:pointer;padding:0}.ex .ghost{margin-left:auto}
+<<<<<<< HEAD
 .mapcard{min-height:200px;align-items:flex-start;justify-content:flex-end;padding:14px;background:url(/art/map.png) center/cover,radial-gradient(circle at 30% 40%,rgba(39,211,255,.35),transparent 40%),radial-gradient(circle at 70% 70%,rgba(30,136,255,.4),transparent 45%),linear-gradient(135deg,#0d3a63,#0a2a4d)}
+=======
+.mapcard{min-height:200px;align-items:flex-start;justify-content:flex-end;padding:14px;background:url(/art/map.webp) center/cover,radial-gradient(circle at 30% 40%,rgba(39,211,255,.35),transparent 40%),radial-gradient(circle at 70% 70%,rgba(30,136,255,.4),transparent 45%),linear-gradient(135deg,#0d3a63,#0a2a4d)}
+>>>>>>> 64a1286b514201750dcba787527d4eb8807aed62
 .mpill{display:flex;align-items:center;gap:10px;background:rgba(7,22,44,.88);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border-radius:16px;padding:10px 14px;max-width:260px}.mpill svg{width:30px;height:30px;margin:0;color:#ff6b5e;flex:none}.mpill b{font-size:.95rem;line-height:1.25}.mpill em{font-style:normal;font-size:1.4rem;opacity:.8}
 .keys{grid-template-columns:repeat(4,1fr)}.kc{display:flex;flex-direction:column;gap:6px;align-items:flex-start;padding:12px}
 .kic{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:rgba(30,136,255,.18);color:var(--cy);font-style:normal}.kic svg{width:22px;height:22px;margin:0}
@@ -296,6 +304,14 @@ button.primary:active,.rpgo:active,.chip:active,.ghost:active,.iconbtn:active,.l
 @keyframes dots{0%,80%,100%{transform:scale(.55);opacity:.4}40%{transform:scale(1);opacity:1}}
 .loadpage{display:grid;place-items:center;min-height:55vh}
 
+<<<<<<< HEAD
+=======
+.warnbox{margin:12px 0 0;padding:10px 12px;border-left:4px solid var(--watch);border-radius:10px;background:var(--soft);font-size:.85rem;line-height:1.55;color:var(--fg)}
+
+/* ไอคอนในวงกลมของป็อปอัปติดตั้ง iOS: ตัด margin-right/vertical-align จากคลาส .ic ที่ทำให้ไอคอนเยื้องซ้าย */
+.iss .itile svg,.iss .icl svg{margin:0;vertical-align:0;display:block}
+
+>>>>>>> 64a1286b514201750dcba787527d4eb8807aed62
 /* ---- สลับธีมแบบเฟดนุ่ม ---- */
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.4s;animation-timing-function:ease-in-out;mix-blend-mode:normal}
 :root.theme-tx *,:root.theme-tx *::before,:root.theme-tx *::after{transition:background-color .4s ease,color .4s ease,border-color .4s ease,fill .4s ease,stroke .4s ease,box-shadow .4s ease!important}
@@ -523,6 +539,7 @@ button.primary:active,.rpgo:active,.chip:active,.ghost:active,.iconbtn:active,.l
 .iss .inote{padding:9px 12px;font-size:.8rem;line-height:1.45;margin:0 0 8px;border-radius:12px}
 .iss .iok{padding:11px;font-size:.95rem;margin-top:2px}
 @media(min-width:861px){.iss{border-radius:22px}}
+<<<<<<< HEAD
 /* ---- โซนอำเภอ/ตำบล ---- */
 .zf{margin-top:10px}.zf .chips{margin:4px 0 6px}.zf .chips small{margin-left:6px;opacity:.7;font-size:.75rem}.zf .chips .on small{opacity:.9}.zf .chips .z0{opacity:.5}
 .zsearch{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.zin{position:relative;flex:1 1 220px;min-width:0}
@@ -540,3 +557,5 @@ button.primary:active,.rpgo:active,.chip:active,.ghost:active,.iconbtn:active,.l
   .rf2 .rfc .okb{font-size:.72rem;padding:3px 8px}.rf2 .rfc .acts{flex-direction:column;gap:6px}
   .rf2 .rfc .acts .ghost{width:100%;font-size:.75rem;padding:6px 8px;display:flex;align-items:center;justify-content:center;gap:4px;margin-left:0}
 }
+=======
+>>>>>>> 64a1286b514201750dcba787527d4eb8807aed62
