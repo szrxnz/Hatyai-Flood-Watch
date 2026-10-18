@@ -1,5 +1,6 @@
 const P: Record<string, string> = {
   home: 'M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10',
+  flag: 'M5 21V4M5 4h12l-2.5 4 2.5 4H5',
   map: 'M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14',
   news: 'M4 4h13v16H4zM17 8h3v10a2 2 0 0 1-2 2M7 8h7M7 12h7M7 16h4',
   camera: 'M3 8h4l2-3h6l2 3h4v11H3zM12 9.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z',

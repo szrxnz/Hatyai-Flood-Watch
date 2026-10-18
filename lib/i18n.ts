@@ -2,6 +2,7 @@ import { NOTICE } from './i18n-notice'
 import { Lang } from './types'
 import { EXTRA } from './i18n-extra'
 import { ZONE } from './i18n-zone'
+import { FLAG } from './i18n-flag'
 const base: Record<Lang, Record<string, string>> = {
  "th": {
   "title": "เฝ้าระวังน้ำท่วมหาดใหญ่",
@@ -421,5 +422,5 @@ const base: Record<Lang, Record<string, string>> = {
   "theme": "切换深色/浅色"
  }
 }
-export const dict: Record<Lang, Record<string, string>> = { th: { ...base.th, ...EXTRA.th, ...NOTICE.th, ...ZONE.th }, en: { ...base.en, ...EXTRA.en, ...NOTICE.en, ...ZONE.en }, zh: { ...base.zh, ...EXTRA.zh, ...NOTICE.zh, ...ZONE.zh } }
+export const dict: Record<Lang, Record<string, string>> = { th: { ...base.th, ...EXTRA.th, ...NOTICE.th, ...ZONE.th, ...FLAG.th }, en: { ...base.en, ...EXTRA.en, ...NOTICE.en, ...ZONE.en, ...FLAG.en }, zh: { ...base.zh, ...EXTRA.zh, ...NOTICE.zh, ...ZONE.zh, ...FLAG.zh } }
 export const isLang = (s: string): s is Lang => s === 'th' || s === 'en' || s === 'zh'

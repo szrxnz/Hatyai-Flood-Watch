@@ -7,6 +7,7 @@ export default function MenuList({ lang, t }: { lang: string; t: T }) {
     { i: 'pin', title: t.area, sub: t.mArea, href: `/${lang}/area` },
     { i: 'news', title: t.updates, sub: t.mUpd, href: `/${lang}/updates` },
     { i: 'bell', title: t.alerts, sub: t.mAlerts, href: `/${lang}/alerts` },
+    { i: 'flag', title: t.zonesMenu, sub: t.mZones, href: `/${lang}/zones` },
     { i: 'camera', title: t.cctv, sub: t.mCctv, href: `/${lang}/cctv` },
     { i: 'install', title: t.install, sub: t.mInstall, href: `/${lang}/install` },
   ]
