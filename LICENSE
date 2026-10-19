@@ -1,0 +1,49 @@
+Hatyai Flood Watch – Source-Available License
+
+Copyright (c) 2026 szrxnz. All rights reserved.
+
+1. PERMITTED USE
+You may, free of charge:
+  a) view and read the source code;
+  b) study it for learning and research;
+  c) run it locally and modify it privately on your own
+     machine for personal, non-commercial learning or testing.
+
+2. RESTRICTIONS
+Without prior written permission from the copyright holder,
+you may NOT:
+  a) copy, publish, or redistribute the code, in whole or in
+     part, whether modified or not;
+  b) deploy it (or a modified version) as a public website,
+     app, or service;
+  c) distribute or publish derivative works, including forks
+     that are made public beyond what GitHub's Terms of Service
+     allow for viewing;
+  d) use it for commercial purposes;
+  e) remove or alter this license or any copyright notice;
+  f) present the project or any derivative as your own work.
+
+3. CONTRIBUTIONS
+If you wish to develop this project further, please open an
+issue or contact the author first. Contributions submitted by
+pull request may be incorporated into the project, and you
+grant the author a perpetual, royalty-free right to use them.
+
+4. THIRD-PARTY DATA AND COMPONENTS
+Data sources (ThaiWater, TMD, Open-Meteo, RainViewer,
+OpenStreetMap, Hat Yai City Climate, OCHA, etc.) and
+third-party libraries remain under their own licenses and
+terms. This license does not cover them.
+
+5. NO WARRANTY / NOT AN OFFICIAL WARNING
+This software is provided "AS IS", without warranty of any
+kind. It is made by a private individual, is not an official
+government service, and its status levels are not official
+disaster warnings. The author is not liable for any damages
+arising from its use.
+
+6. TERMINATION
+Any breach of this license automatically terminates your
+rights under it.
+
+For permission requests, contact: whxlaz@gmail.com
