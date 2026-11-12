@@ -1,6 +1,7 @@
 const API = 'https://hatyaicityclimate.org/api/flood/cams'
 const HOST = 'https://hatyaicityclimate.org/'
 export const CAM_SITE = HOST
+const UA = { 'User-Agent': 'hatyai-flood-watch (contact: whxlaz@gmail.com)', Accept: 'application/json' }
 const HIDDEN = ['city camera 2', 'ภาพจากเครือข่าย']
 export interface Cam { id: string; name: string; lat: number | null; lng: number | null; image: string | null; sponsor: string; at: string | null; offline: boolean; radar: boolean }
 
@@ -8,10 +9,10 @@ const iso = (s: unknown) => (typeof s === 'string' && /^\d{4}-\d\d-\d\d \d\d:\d\
 
 export async function getCams(): Promise<Cam[]> {
   try {
-    const r = await fetch(API, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000), headers: { 'User-Agent': 'hatyai-flood-watch (contact: you@example.com)' } })
-    if (!r.ok) return []
+    const r = await fetch(API, { next: { revalidate: 300 }, signal: AbortSignal.timeout(12000), headers: UA })
+    if (!r.ok) { console.error('cams upstream status', r.status); return [] }
     const j = await r.json()
-    if (!Array.isArray(j?.items)) return []
+    if (!Array.isArray(j?.items)) { console.error('cams bad shape'); return [] }
     const now = Date.now()
     return j.items.flatMap((x: any): Cam[] => {
       if (!x || x.enable !== 1 || typeof x.title !== 'string') return []
@@ -24,5 +25,5 @@ export async function getCams(): Promise<Cam[]> {
       return [{ id: String(x.cameraId), name: x.title, lat, lng, image: photo, sponsor: String(x.sponsorName ?? '').trim(), at,
         offline: !!x.statusMsg || !at || now - Date.parse(at) > 3 * 3600_000, radar }]
     })
-  } catch { return [] }
+  } catch (e) { console.error('cams fetch failed', e); return [] }
 }
